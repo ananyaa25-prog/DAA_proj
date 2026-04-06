@@ -1,1 +1,1 @@
-# DAA_proj
+topic for the project: Smart Exam Timetable Generator
