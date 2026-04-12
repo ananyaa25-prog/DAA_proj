@@ -17,10 +17,10 @@ Each course is represented as a node, and an edge exists between two courses if 
 4. Performance Comparison on multiple datasets
 
 ## Team Structure
-- Member 1: Graph construction + Greedy Coloring + Integration
-- Member 2: Exact Backtracking Coloring
-- Member 3: DSATUR / Optimized Coloring
-- Member 4: Dataset Generation + Analysis
+- Ananya: Graph construction + Greedy Coloring + Integration
+- Shivani: Exact Backtracking Coloring
+- Ishaan: DSATUR / Optimized Coloring
+- Tanya: Dataset Generation + Analysis
 
 ## Project Structure
 - `common.h` → shared declarations
