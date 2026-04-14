@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <errno.h>
 
 /* ───────────────────────────── Limits ───────────────────────────── */
 #define MAX_COURSES      100       /* maximum number of courses        */
@@ -31,6 +32,7 @@
 /*
  * AdjNode – singly-linked list node for one adjacency entry.
  */
+
 typedef struct AdjNode {
     int              course_id;   /* neighbour course index           */
     struct AdjNode  *next;
@@ -97,7 +99,11 @@ void graph_free(Graph *g);
 
 /* Pretty-print the adjacency list to stdout. */
 void graph_print(const Graph *g);
+void build_conflict_graph(Graph *g,
+                          const StudentEnrollment *enrollments,
+                          int num_students);
 
+void greedy_coloring(const Graph *g, Timetable *t);
 /* ─────────────────────── Timetable API ──────────────────────────── */
 
 /* Initialise a timetable (all slots set to UNCOLORED). */
