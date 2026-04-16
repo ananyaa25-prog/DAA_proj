@@ -66,8 +66,11 @@ static int backtrack(const Graph *g, int m, int v, int assignment[]) {
  */
 void exact_backtracking_coloring(const Graph *g, Timetable *t) {
 
-    TIMER_START(start);
+    if (!g || !t) return;
 
+    timetable_init(t, "Exact Backtracking");
+    
+    TIMER_START(start);
     int assignment[MAX_COURSES];
 
     // Initialize all courses as UNCOLORED
@@ -106,5 +109,5 @@ void exact_backtracking_coloring(const Graph *g, Timetable *t) {
     t->elapsed_ms = TIMER_END_MS(start);
 
     // Set algorithm label
-    strcpy(t->label, "Exact Backtracking");
+    
 }

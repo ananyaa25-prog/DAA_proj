@@ -104,6 +104,7 @@ void build_conflict_graph(Graph *g,
                           int num_students);
 
 void greedy_coloring(const Graph *g, Timetable *t);
+void exact_backtracking_coloring(const Graph *g, Timetable *t);
 /* ─────────────────────── Timetable API ──────────────────────────── */
 
 /* Initialise a timetable (all slots set to UNCOLORED). */
