@@ -80,19 +80,19 @@ void graph_free(Graph *g)
         g->adj[i] = NULL;
     }
 }
-
 void graph_print(const Graph *g)
 {
     if (!g) return;
-    printf("\n╔══════════════════════════════════════════╗\n");
-    printf("║         CONFLICT GRAPH STRUCTURE         ║\n");
-    printf("╠══════════════════════════════════════════╣\n");
-    printf("║  Courses : %-4d   Conflicts (edges): %-4d ║\n",
+
+    printf("\n==================================================\n");
+    printf("              CONFLICT GRAPH STRUCTURE\n");
+    printf("==================================================\n");
+    printf("Courses: %d   Conflicts (edges): %d\n",
            g->num_courses, g->edge_count);
-    printf("╠══════════════════════════════════════════╣\n");
+    printf("--------------------------------------------------\n");
 
     for (int i = 0; i < g->num_courses; i++) {
-        printf("║  [%2d] %-15s (deg %2d) → ",
+        printf("[%2d] %-15s (deg %2d) -> ",
                i, g->course_names[i], g->degree[i]);
 
         AdjNode *cur = g->adj[i];
@@ -102,11 +102,14 @@ void graph_print(const Graph *g)
             cur = cur->next;
             printed++;
         }
+
         if (!printed) printf("(no conflicts)");
         printf("\n");
     }
-    printf("╚══════════════════════════════════════════╝\n\n");
+
+    printf("==================================================\n\n");
 }
+
 
 /* ═══════════════════════════════════════════════════════════════════
  *  CONFLICT GRAPH BUILDER
@@ -283,39 +286,31 @@ void timetable_print(const Timetable *t, const Graph *g)
 {
     if (!t || !g) return;
 
-    printf("\n╔══════════════════════════════════════════════════════╗\n");
-    printf("║           EXAM TIMETABLE  –  %-22s ║\n", t->label);
-    printf("╠══════════════════════════════════════════════════════╣\n");
-    printf("║  Slots used : %-3d   Conflicts : %-3d   Time : %6.2f ms ║\n",
+    printf("\n============================================================\n");
+    printf("EXAM TIMETABLE - %s\n", t->label);
+    printf("============================================================\n");
+    printf("Slots used: %d   Conflicts: %d   Time: %.2f ms\n",
            t->num_colors_used, t->conflict_count, t->elapsed_ms);
-    printf("╠══════════════════════════════════════════════════════╣\n");
-    printf("║  %-4s  %-25s  %-10s     ║\n", "ID", "Course Name", "Slot");
-    printf("╠══════════════════════════════════════════════════════╣\n");
+    printf("------------------------------------------------------------\n");
+    printf("%-6s %-25s %-10s\n", "ID", "Course Name", "Slot");
+    printf("------------------------------------------------------------\n");
 
-    /* Group by slot for readability */
     for (int slot = 0; slot < t->num_colors_used; slot++) {
-        int first = 1;
         for (int c = 0; c < g->num_courses; c++) {
             if (t->slot_assignment[c] == slot) {
-                if (first) {
-                    printf("║  %-4d  %-25s  Slot %-3d        ║\n",
-                           c, g->course_names[c], slot + 1);
-                    first = 0;
-                } else {
-                    printf("║  %-4d  %-25s  Slot %-3d        ║\n",
-                           c, g->course_names[c], slot + 1);
-                }
+                printf("%-6d %-25s Slot %-3d\n",
+                       c, g->course_names[c], slot + 1);
             }
         }
-        printf("╠──────────────────────────────────────────────────────╣\n");
+        printf("------------------------------------------------------------\n");
     }
 
     if (t->conflict_count == 0) {
-        printf("║         ✓  CONFLICT-FREE TIMETABLE GENERATED         ║\n");
+        printf("CONFLICT-FREE TIMETABLE GENERATED\n");
     } else {
-        printf("║  ✗  WARNING: %d conflict(s) detected!                 ║\n",
-               t->conflict_count);
+        printf("WARNING: %d conflict(s) detected!\n", t->conflict_count);
     }
-    printf("╚══════════════════════════════════════════════════════╝\n\n");
+
+    printf("============================================================\n\n");
 }
 

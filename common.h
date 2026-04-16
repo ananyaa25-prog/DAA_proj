@@ -105,6 +105,10 @@ void build_conflict_graph(Graph *g,
 
 void greedy_coloring(const Graph *g, Timetable *t);
 void exact_backtracking_coloring(const Graph *g, Timetable *t);
+void dsatur_coloring(const Graph *g, Timetable *t);
+int analyze_dataset_file(const char *path);
+void analyze_default_datasets(void);
+
 /* ─────────────────────── Timetable API ──────────────────────────── */
 
 /* Initialise a timetable (all slots set to UNCOLORED). */

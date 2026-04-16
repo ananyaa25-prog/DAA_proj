@@ -35,8 +35,7 @@
 /* These are implemented by other team members.  Weak stubs are        */
 /* compiled if their .c files are absent (see bottom of this file).   */
 extern void exact_backtracking_coloring(const Graph *g, Timetable *t);
-extern void branch_and_bound_coloring  (const Graph *g, Timetable *t);
-extern void dsatur_coloring            (const Graph *g, Timetable *t);
+extern void dsatur_coloring(const Graph *g, Timetable *t);
 
 /* ── Local helpers ──────────────────────────────────────────────────*/
 static int  read_input (const char *path, Graph *g,
@@ -72,7 +71,7 @@ int main(int argc, char *argv[])
     graph_print(&g);
 
     /* ── 4. Run all algorithms ──────────────────────────────────── */
-    Timetable results[4];
+    Timetable results[3];
     int       num_results = 0;
 
     /* (a) Greedy – always runs */
@@ -82,7 +81,7 @@ int main(int argc, char *argv[])
     exact_backtracking_coloring(&g, &results[num_results++]);
 
     /* (c) Branch & Bound */
-    branch_and_bound_coloring(&g, &results[num_results++]);
+    //branch_and_bound_coloring(&g, &results[num_results++]);
 
     /* (d) DSATUR heuristic */
     dsatur_coloring(&g, &results[num_results++]);
@@ -182,31 +181,34 @@ static int read_input(const char *path,
  *  COMPARISON TABLE
  * ═══════════════════════════════════════════════════════════════════ */
 
+/* ---------------- PERFORMANCE TABLE ---------------- */
+
 static void print_comparison(Timetable results[], int count)
 {
-    printf("\n╔══════════════════════════════════════════════════════════════════╗\n");
-    printf("║              ALGORITHM PERFORMANCE COMPARISON                    ║\n");
-    printf("╠══════════════════════════════════════╦═══════╦═══════════╦══════╣\n");
-    printf("║  %-36s ║ Slots ║ Conflicts ║ ms   ║\n", "Algorithm");
-    printf("╠══════════════════════════════════════╬═══════╬═══════════╬══════╣\n");
+    printf("\n============================================================\n");
+    printf("            ALGORITHM PERFORMANCE COMPARISON\n");
+    printf("============================================================\n");
+    printf("%-36s | Slots | Conflicts |  ms\n", "Algorithm");
+    printf("------------------------------------------------------------\n");
 
     for (int i = 0; i < count; i++) {
         const Timetable *t = &results[i];
-        /* Skip algorithms that did not run (slot_assignment all UNCOLORED) */
+
         if (t->num_colors_used == 0) continue;
 
-        printf("║  %-36s ║  %3d  ║    %3d    ║%5.1f ║\n",
+        printf("%-36s |  %3d  |    %3d    | %5.1f\n",
                t->label,
                t->num_colors_used,
                t->conflict_count,
                t->elapsed_ms);
     }
 
-    printf("╚══════════════════════════════════════╩═══════╩═══════════╩══════╝\n");
+    printf("============================================================\n");
 
-    /* Highlight winner */
+    /* Find best */
     int best_slots = MAX_SLOTS + 1;
     int best_idx   = -1;
+
     for (int i = 0; i < count; i++) {
         if (results[i].num_colors_used > 0 &&
             results[i].conflict_count == 0 &&
@@ -217,11 +219,11 @@ static void print_comparison(Timetable results[], int count)
     }
 
     if (best_idx >= 0) {
-        printf("\n  ★  Best (fewest slots, conflict-free): %s  [%d slots]\n\n",
+        printf("\n  * Best (fewest slots, conflict-free): %s [%d slots]\n\n",
                results[best_idx].label,
                results[best_idx].num_colors_used);
     } else {
-        printf("\n  ✗  No fully conflict-free solution found with given slot count.\n\n");
+        printf("\n  X No conflict-free solution found.\n\n");
     }
 }
 
@@ -231,15 +233,9 @@ static void print_comparison(Timetable results[], int count)
 
 static void print_banner(void)
 {
-    printf("\n");
-    printf("  ███████╗███████╗████████╗ ██████╗ \n");
-    printf("  ██╔════╝██╔════╝╚══██╔══╝██╔════╝ \n");
-    printf("  ███████╗█████╗     ██║   ██║  ███╗\n");
-    printf("  ╚════██║██╔══╝     ██║   ██║   ██║\n");
-    printf("  ███████║███████╗   ██║   ╚██████╔╝\n");
-    printf("  ╚══════╝╚══════╝   ╚═╝    ╚═════╝ \n");
-    printf("  Smart Exam Timetable Generator\n");
-    printf("  ─────────────────────────────────────────────\n\n");
+    printf("\n============================================\n");
+    printf("   Smart Exam Timetable Generator (SETG)\n");
+    printf("============================================\n\n");
 }
 
 /* ═══════════════════════════════════════════════════════════════════
